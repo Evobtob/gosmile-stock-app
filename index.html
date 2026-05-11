@@ -16,7 +16,7 @@
       <div>
         <p class="eyebrow">GoSmile · Desagno</p>
         <h1>Stock protético</h1>
-        <p class="subtitle">Pilares GM em clínica e laboratório, com registo por paciente e fotografia da embalagem.</p>
+
       </div>
       <div class="status-pill" id="backendStatus">Modo local</div>
     </section>
@@ -70,11 +70,20 @@
         <label>Observações
           <textarea id="notes" rows="3" placeholder="Ex.: trabalho enviado, lote, médico…"></textarea>
         </label>
-        <label class="photo-box">
-          <input id="photo" type="file" accept="image/*" capture="environment" />
-          <span>📷 Tirar foto da embalagem</span>
+        <div class="photo-box">
+          <p class="photo-title">Fotografia da embalagem</p>
+          <div class="photo-actions">
+            <label class="photo-choice">
+              <input id="photoCamera" type="file" accept="image/*" capture="environment" />
+              <span>📷 Tirar fotografia</span>
+            </label>
+            <label class="photo-choice">
+              <input id="photoLibrary" type="file" accept="image/*" />
+              <span>🖼️ Escolher da galeria</span>
+            </label>
+          </div>
           <img id="photoPreview" alt="Pré-visualização da embalagem" hidden />
-        </label>
+        </div>
         <button class="primary" type="submit">Registar movimento</button>
         <p class="hint">Quando ligado ao Google Apps Script, movimentos actualizam a Sheet e enviam email para gerencia@gosmile.pt quando stock fica abaixo de 2.</p>
       </form>
