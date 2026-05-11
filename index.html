@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="GoSmile Stock" />
   <title>GoSmile Stock</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css?v=sync2" />
+  <link rel="stylesheet" href="styles.css?v=histfilters1" />
 </head>
 <body>
   <main class="app-shell">
@@ -84,7 +84,15 @@
 
     <section id="historyView" class="view">
       <div class="card glass">
-        <div class="card-head"><h2>Histórico</h2><button id="exportBtn" class="secondary">Exportar CSV</button></div>
+        <div class="card-head history-head">
+          <h2>Histórico</h2>
+          <div class="history-filters" aria-label="Filtrar movimentos">
+            <button class="filter-chip active" data-history-filter="todos" type="button">Todos</button>
+            <button class="filter-chip" data-history-filter="entrada" type="button">Entradas</button>
+            <button class="filter-chip" data-history-filter="saida" type="button">Saídas</button>
+          </div>
+        </div>
+        <button id="exportBtn" class="secondary export-history">Exportar CSV</button>
         <div id="historyList" class="history-list"></div>
       </div>
     </section>
@@ -105,6 +113,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=sync2"></script>
+  <script src="app.js?v=histfilters1"></script>
 </body>
 </html>

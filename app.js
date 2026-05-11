@@ -16,6 +16,7 @@ const $=s=>document.querySelector(s);
 const $$=s=>Array.from(document.querySelectorAll(s));
 let state=loadState();
 let photoData="";
+let historyFilter="todos";
 
 function loadState(){
   const saved=localStorage.getItem('gosmile-stock-state');
@@ -44,8 +45,8 @@ function renderStatus(){const total=state.components.reduce((s,c)=>s+Number(c.cu
 function renderComponents(){const q=($('#search').value||'').toLowerCase();const rows=state.components.filter(c=>`${c.ref} ${c.measure} ${c.category}`.toLowerCase().includes(q));$('#stockList').innerHTML=rows.map(c=>`<article class="item"><div class="item-head"><div><div class="ref">${esc(c.ref)}</div><div class="measure">${esc(c.measure)}</div></div><span class="badge ${stockClass(Number(c.current))}">${Number(c.current)} un.</span></div><div class="meta"><span class="chip">${esc(c.category||'Componente')}</span><span class="chip">Inicial: ${Number(c.initial||0)}</span>${Number(c.current)<2?'<span class="chip">⚠ Repor stock</span>':''}</div></article>`).join('')||'<p class="hint">Sem resultados.</p>'}
 function renderSelect(){const sel=$('#componentSelect');const val=sel.value;sel.innerHTML=state.components.map(c=>`<option value="${esc(c.ref)}">${esc(c.ref)} · ${esc(c.measure)} · stock ${Number(c.current)}</option>`).join('');if(val)sel.value=val}
 function renderHistory(){
-  const items=state.history.map((m,index)=>({...m,index})).reverse();
-  $('#historyList').innerHTML=items.map(m=>`<div class="movement ${m.undone?'undone':''}"><div class="movement-main"><strong>${m.type==='entrada'?'Entrada':'Saída'} · ${esc(m.ref)} · ${m.qty} un.${m.undone?' · ANULADO':''}</strong><small>${new Date(m.ts).toLocaleString('pt-PT')} · ${esc(m.location||'')} ${m.patient?'· Paciente: '+esc(m.patient):''}</small>${m.notes?`<p>${esc(m.notes)}</p>`:''}${m.photo?'<small>📷 foto registada</small>':''}</div>${isUndoable(m)?`<button class="undo-btn" data-index="${m.index}" type="button">↶ Undo</button>`:''}</div>`).join('')||'<p class="hint">Ainda sem movimentos.</p>';
+  const items=state.history.map((m,index)=>({...m,index})).filter(m=>historyFilter==='todos'||m.type===historyFilter).reverse();
+  $('#historyList').innerHTML=items.map(m=>`<div class="movement ${m.type==='entrada'?'movement-in':'movement-out'} ${m.undone?'undone':''}"><div class="movement-main"><strong>${m.type==='entrada'?'Entrada':'Saída'} · ${esc(m.ref)} · ${m.qty} un.${m.undone?' · ANULADO':''}</strong><small>${new Date(m.ts).toLocaleString('pt-PT')} · ${esc(m.location||'')} ${m.patient?'· Paciente: '+esc(m.patient):''}</small>${m.notes?`<p>${esc(m.notes)}</p>`:''}${m.photo?'<small>📷 foto registada</small>':''}</div>${isUndoable(m)?`<button class="undo-btn" data-index="${m.index}" type="button">↶ Undo</button>`:''}</div>`).join('')||`<p class="hint">Sem ${historyFilter==='entrada'?'entradas':historyFilter==='saida'?'saídas':'movimentos'}.</p>`;
 }
 
 async function syncFromBackend({silent=false}={}){state.config.scriptUrl=DEFAULT_BACKEND_URL;const status=$('#backendStatus');status.dataset.syncing='1';status.textContent='A sincronizar…';try{const res=await fetch(state.config.scriptUrl+'?action=list&ts='+Date.now(),{cache:'no-store'});const data=await res.json();if(data.components){state.components=data.components;save();delete status.dataset.syncing;status.textContent='Google Sheet';render();if(!silent)toast('Stock sincronizado com a Google Sheet')}}catch(e){delete status.dataset.syncing;status.textContent='Erro ligação';toast('Falha ao sincronizar: '+e.message)}}
@@ -77,6 +78,7 @@ $('#historyList').addEventListener('click',async e=>{
 });
 
 $$('.tab').forEach(b=>b.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.view').forEach(v=>v.classList.remove('active'));$('#'+b.dataset.view+'View').classList.add('active')}));
+$$('[data-history-filter]').forEach(b=>b.addEventListener('click',()=>{historyFilter=b.dataset.historyFilter;$$('[data-history-filter]').forEach(x=>x.classList.toggle('active',x===b));renderHistory()}));
 $('#search').addEventListener('input',renderComponents);$('#syncBtn').addEventListener('click',()=>syncFromBackend());
 $('#saveConfig').addEventListener('click',()=>{state.config.scriptUrl=DEFAULT_BACKEND_URL;state.config.alertEmail=$('#alertEmail').value.trim()||'gerencia@gosmile.pt';save();render();toast('Configuração guardada')});
 $('#resetDemo').addEventListener('click',()=>{if(confirm('Limpar histórico local deste dispositivo? O stock continua vindo da Google Sheet.')){state.history=[];save();render();toast('Histórico local limpo')}});
