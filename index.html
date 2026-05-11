@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="GoSmile Stock" />
   <title>GoSmile Stock</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css?v=a1453f4" />
+  <link rel="stylesheet" href="styles.css?v=undo1" />
 </head>
 <body>
   <main class="app-shell">
@@ -59,7 +59,7 @@
           </label>
           <label>Local
             <select id="location" required>
-              <option>Laboratório Desagno</option>
+              <option>Desagno</option>
               <option>Clínica GoSmile</option>
             </select>
           </label>
@@ -70,18 +70,11 @@
         <label>Observações
           <textarea id="notes" rows="3" placeholder="Ex.: trabalho enviado, lote, médico…"></textarea>
         </label>
-        <div class="photo-box">
-          <p class="photo-title">Fotografia da embalagem</p>
-          <div class="photo-actions">
-            <label class="photo-choice">
-              <input id="photoCamera" type="file" accept="image/*" capture="environment" />
-              <span>📷 Tirar fotografia</span>
-            </label>
-            <label class="photo-choice">
-              <input id="photoLibrary" type="file" accept="image/*" />
-              <span>🖼️ Escolher da galeria</span>
-            </label>
-          </div>
+        <div class="photo-box" aria-label="Fotografia da embalagem">
+          <label class="photo-icon" aria-label="Abrir câmara">
+            <input id="photoCamera" type="file" accept="image/*" capture="environment" />
+            <span aria-hidden="true">📷</span>
+          </label>
           <img id="photoPreview" alt="Pré-visualização da embalagem" hidden />
         </div>
         <button class="primary" type="submit">Registar movimento</button>
@@ -112,6 +105,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=a1453f4"></script>
+  <script src="app.js?v=undo1"></script>
 </body>
 </html>
