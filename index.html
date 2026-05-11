@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GoSmile Stock" />
+  <title>GoSmile Stock</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero glass">
+      <div>
+        <p class="eyebrow">GoSmile · Desagno</p>
+        <h1>Stock protético</h1>
+        <p class="subtitle">Pilares GM em clínica e laboratório, com registo por paciente e fotografia da embalagem.</p>
+      </div>
+      <div class="status-pill" id="backendStatus">Modo local</div>
+    </section>
+
+    <nav class="segmented" aria-label="Secções">
+      <button class="tab active" data-view="stock">Stock</button>
+      <button class="tab" data-view="movement">Movimento</button>
+      <button class="tab" data-view="history">Histórico</button>
+      <button class="tab" data-view="config">Config</button>
+    </nav>
+
+    <section id="stockView" class="view active">
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Pesquisar referência, medida…" autocomplete="off" />
+        <button id="syncBtn" class="icon-btn" title="Sincronizar">↻</button>
+      </div>
+      <div class="summary-grid">
+        <div class="metric glass"><span id="totalUnits">0</span><label>unidades</label></div>
+        <div class="metric glass warn"><span id="lowCount">0</span><label>alertas &lt; 2</label></div>
+        <div class="metric glass"><span id="refCount">0</span><label>referências</label></div>
+      </div>
+      <div id="stockList" class="stock-list"></div>
+    </section>
+
+    <section id="movementView" class="view">
+      <form id="movementForm" class="card glass">
+        <h2>Novo movimento</h2>
+        <label>Tipo
+          <select id="movementType" required>
+            <option value="saida">Dar baixa / gasto em paciente</option>
+            <option value="entrada">Entrada de stock comprado</option>
+          </select>
+        </label>
+        <label>Componente
+          <select id="componentSelect" required></select>
+        </label>
+        <div class="row">
+          <label>Quantidade
+            <input id="quantity" type="number" min="1" value="1" required />
+          </label>
+          <label>Local
+            <select id="location" required>
+              <option>Laboratório Desagno</option>
+              <option>Clínica GoSmile</option>
+            </select>
+          </label>
+        </div>
+        <label id="patientWrap">Paciente
+          <input id="patient" type="text" placeholder="Nome do paciente" />
+        </label>
+        <label>Observações
+          <textarea id="notes" rows="3" placeholder="Ex.: trabalho enviado, lote, médico…"></textarea>
+        </label>
+        <label class="photo-box">
+          <input id="photo" type="file" accept="image/*" capture="environment" />
+          <span>📷 Tirar foto da embalagem</span>
+          <img id="photoPreview" alt="Pré-visualização da embalagem" hidden />
+        </label>
+        <button class="primary" type="submit">Registar movimento</button>
+        <p class="hint">Quando ligado ao Google Apps Script, movimentos actualizam a Sheet e enviam email para gerencia@gosmile.pt quando stock fica abaixo de 2.</p>
+      </form>
+    </section>
+
+    <section id="historyView" class="view">
+      <div class="card glass">
+        <div class="card-head"><h2>Histórico</h2><button id="exportBtn" class="secondary">Exportar CSV</button></div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+
+    <section id="configView" class="view">
+      <div class="card glass">
+        <h2>Configuração</h2>
+        <label>URL do Google Apps Script
+          <input id="scriptUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" />
+        </label>
+        <label>Email de alerta
+          <input id="alertEmail" type="email" value="gerencia@gosmile.pt" />
+        </label>
+        <button id="saveConfig" class="primary">Guardar configuração</button>
+        <button id="resetDemo" class="secondary danger">Repor dados iniciais</button>
+        <p class="hint">Instalar no iPhone: Safari → Partilhar → “Adicionar ao ecrã principal”.</p>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
