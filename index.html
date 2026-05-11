@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="GoSmile Stock" />
-  <title>GoSmile Stock</title>
+  <meta name="apple-mobile-web-app-title" content="Stock Neodent" />
+  <title>Stock Neodent</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css?v=histfilters1" />
+  <link rel="stylesheet" href="styles.css?v=batch1" />
 </head>
 <body>
   <main class="app-shell">
     <section class="hero glass">
       <div>
         <p class="eyebrow">GoSmile · Desagno</p>
-        <h1>Stock protético</h1>
+        <h1>Stock Neodent</h1>
 
       </div>
       <div class="status-pill" id="backendStatus">Modo local</div>
@@ -50,20 +50,24 @@
             <option value="entrada">Entrada de stock comprado</option>
           </select>
         </label>
-        <label>Componente
-          <select id="componentSelect" required></select>
-        </label>
-        <div class="row">
-          <label>Quantidade
-            <input id="quantity" type="number" min="1" value="1" required />
+        <div class="component-picker">
+          <label>Componente
+            <select id="componentSelect" required></select>
           </label>
-          <label>Local
-            <select id="location" required>
-              <option>Desagno</option>
-              <option>Clínica GoSmile</option>
-            </select>
-          </label>
+          <div class="row add-row">
+            <label>Quantidade
+              <input id="quantity" type="number" min="1" value="1" required />
+            </label>
+            <button id="addComponent" class="secondary small-action" type="button">Adicionar</button>
+          </div>
+          <div id="movementItems" class="movement-items" aria-live="polite"></div>
         </div>
+        <label>Local
+          <select id="location" required>
+            <option>Desagno</option>
+            <option>Clínica GoSmile</option>
+          </select>
+        </label>
         <label id="patientWrap">Paciente
           <input id="patient" type="text" placeholder="Nome do paciente" />
         </label>
@@ -113,6 +117,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=histfilters1"></script>
+  <script src="app.js?v=batch1"></script>
 </body>
 </html>

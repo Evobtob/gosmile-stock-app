@@ -16,28 +16,43 @@ function authorizeOnce() {
 function doPost(e) {
   try {
     const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    if (!body.ref || !body.type || !body.qty) throw new Error('Dados incompletos');
+    const items = Array.isArray(body.items) && body.items.length ? body.items : [{ ref: body.ref, qty: body.qty }];
+    if (!body.type || !items.length) throw new Error('Dados incompletos');
+    items.forEach(item => {
+      if (!item.ref || !Number(item.qty)) throw new Error('Componente/quantidade inválidos');
+    });
+
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const sh = ss.getSheets()[0];
     const values = sh.getDataRange().getValues();
-    const rowIndex = values.findIndex((r, i) => i > 0 && String(r[2]).trim() === String(body.ref).trim());
-    if (rowIndex < 0) throw new Error('Referência não encontrada: ' + body.ref);
-    const current = Number(values[rowIndex][5] || 0);
-    const qty = Number(body.qty);
-    const next = body.type === 'saida' ? current - qty : current + qty;
-    if (next < 0) throw new Error('Stock insuficiente');
-    sh.getRange(rowIndex + 1, 6).setValue(next);
+    const updates = items.map(item => {
+      const ref = String(item.ref).trim();
+      const rowIndex = values.findIndex((r, i) => i > 0 && String(r[2]).trim() === ref);
+      if (rowIndex < 0) throw new Error('Referência não encontrada: ' + ref);
+      const current = Number(values[rowIndex][5] || 0);
+      const qty = Number(item.qty);
+      const next = body.type === 'saida' ? current - qty : current + qty;
+      if (next < 0) throw new Error('Stock insuficiente: ' + ref);
+      return { ref, rowIndex, qty, next };
+    });
+
+    updates.forEach(u => sh.getRange(u.rowIndex + 1, 6).setValue(u.next));
 
     let log = ss.getSheetByName('Movimentos');
     if (!log) log = ss.insertSheet('Movimentos');
     if (log.getLastRow() === 0) log.appendRow(['Data', 'Tipo', 'Referência', 'Quantidade', 'Paciente', 'Local', 'Notas', 'Stock após', 'Foto base64']);
-    log.appendRow([new Date(), body.type, body.ref, qty, body.patient || '', body.location || '', body.notes || '', next, body.photo || '']);
+    const now = new Date();
+    updates.forEach(u => {
+      log.appendRow([now, body.type, u.ref, u.qty, body.patient || '', body.location || '', body.notes || '', u.next, body.photo || '']);
+    });
 
-    if (next < 2) {
+    const low = updates.filter(u => u.next < 2);
+    if (low.length) {
       MailApp.sendEmail({
         to: body.alertEmail || ALERT_EMAIL_DEFAULT,
-        subject: 'Alerta stock baixo GoSmile: ' + body.ref,
-        body: 'O componente ' + body.ref + ' ficou com stock de ' + next + ' unidade(s).' + '\n\n' +
+        subject: 'Alerta stock baixo Stock Neodent: ' + low.map(u => u.ref).join(', '),
+        body: 'Os seguintes componentes ficaram com stock abaixo de 2 unidade(s):\n\n' +
+              low.map(u => '- ' + u.ref + ': ' + u.next + ' unidade(s)').join('\n') + '\n\n' +
               'Paciente: ' + (body.patient || '-') + '\n' +
               'Local: ' + (body.location || '-') + '\n' +
               'Notas: ' + (body.notes || '-')
