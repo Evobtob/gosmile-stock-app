@@ -1,5 +1,6 @@
 const SHEET_ID = '1aEU9yqGAEgcNhXUfWDStjqHI-4s5BwZa6Oyjlm2QN7M';
 const ALERT_EMAIL_DEFAULT = 'gerencia@gosmile.pt';
+const SENDER_NAME = 'Nia Santos';
 
 function doGet(e) {
   const params = e && e.parameter ? e.parameter : {};
@@ -50,12 +51,15 @@ function doPost(e) {
     if (low.length) {
       MailApp.sendEmail({
         to: body.alertEmail || ALERT_EMAIL_DEFAULT,
+        name: SENDER_NAME,
         subject: 'Alerta stock baixo Stock Neodent: ' + low.map(u => u.ref).join(', '),
         body: 'Os seguintes componentes ficaram com stock abaixo de 2 unidade(s):\n\n' +
               low.map(u => '- ' + u.ref + ': ' + u.next + ' unidade(s)').join('\n') + '\n\n' +
               'Paciente: ' + (body.patient || '-') + '\n' +
               'Local: ' + (body.location || '-') + '\n' +
-              'Notas: ' + (body.notes || '-')
+              'Notas: ' + (body.notes || '-') + '\n\n' +
+              'Nia Santos\n' +
+              'Assistente digital de Bruno Aires'
       });
     }
     return json({ ok: true, components: readComponents() });
