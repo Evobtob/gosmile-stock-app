@@ -2,13 +2,20 @@ const SHEET_ID = '1aEU9yqGAEgcNhXUfWDStjqHI-4s5BwZa6Oyjlm2QN7M';
 const ALERT_EMAIL_DEFAULT = 'gerencia@gosmile.pt';
 
 function doGet(e) {
-  if ((e.parameter.action || 'list') === 'list') return json({ ok: true, components: readComponents() });
+  const params = e && e.parameter ? e.parameter : {};
+  const action = params.action || 'list';
+  if (action === 'list') return json({ ok: true, components: readComponents() });
   return json({ ok: false, error: 'Action inválida' });
+}
+
+function authorizeOnce() {
+  // Função segura para correr manualmente no editor e autorizar SpreadsheetApp/MailApp.
+  return readComponents().length;
 }
 
 function doPost(e) {
   try {
-    const body = JSON.parse(e.postData.contents || '{}');
+    const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (!body.ref || !body.type || !body.qty) throw new Error('Dados incompletos');
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const sh = ss.getSheets()[0];
