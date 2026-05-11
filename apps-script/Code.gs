@@ -30,11 +30,10 @@ function doPost(e) {
       MailApp.sendEmail({
         to: body.alertEmail || ALERT_EMAIL_DEFAULT,
         subject: 'Alerta stock baixo GoSmile: ' + body.ref,
-        body: 'O componente ' + body.ref + ' ficou com stock de ' + next + ' unidade(s).
-
-Paciente: ' + (body.patient || '-') + '
-Local: ' + (body.location || '-') + '
-Notas: ' + (body.notes || '-')
+        body: 'O componente ' + body.ref + ' ficou com stock de ' + next + ' unidade(s).' + '\n\n' +
+              'Paciente: ' + (body.patient || '-') + '\n' +
+              'Local: ' + (body.location || '-') + '\n' +
+              'Notas: ' + (body.notes || '-')
       });
     }
     return json({ ok: true, components: readComponents() });
