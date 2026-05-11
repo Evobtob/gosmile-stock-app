@@ -12,8 +12,9 @@ const DEFAULT_COMPONENTS=[
 ];
 const SHEET_ID="1aEU9yqGAEgcNhXUfWDStjqHI-4s5BwZa6Oyjlm2QN7M";
 const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));
+const DEFAULT_BACKEND_URL="https://script.google.com/macros/s/AKfycbyLlRpOmNISvrJSJkN62ot3mTOtbdaykA1CqJwmlSL1FDkmcVd8t6puYv_RxqOk724/exec";
 let state=loadState();let photoData="";
-function loadState(){const saved=localStorage.getItem('gosmile-stock-state');if(saved){try{const parsed=JSON.parse(saved);if(Array.isArray(parsed.components))return parsed}catch{}}return{components:structuredClone(DEFAULT_COMPONENTS),history:[{ts:"2026-04-16T10:00:00",type:"saida",ref:"135.400 + 135.401",qty:2,patient:"M helena",location:"Laboratório Desagno",notes:"Importado da folha original",stockAfter:""}],config:{scriptUrl:"",alertEmail:"gerencia@gosmile.pt"}}}
+function loadState(){const saved=localStorage.getItem('gosmile-stock-state');if(saved){try{const parsed=JSON.parse(saved);if(Array.isArray(parsed.components)){parsed.config=parsed.config||{};parsed.config.scriptUrl=parsed.config.scriptUrl||DEFAULT_BACKEND_URL;parsed.config.alertEmail=parsed.config.alertEmail||"gerencia@gosmile.pt";return parsed}}catch{}}return{components:structuredClone(DEFAULT_COMPONENTS),history:[{ts:"2026-04-16T10:00:00",type:"saida",ref:"135.400 + 135.401",qty:2,patient:"M helena",location:"Laboratório Desagno",notes:"Importado da folha original",stockAfter:""}],config:{scriptUrl:DEFAULT_BACKEND_URL,alertEmail:"gerencia@gosmile.pt"}}}
 function save(){localStorage.setItem('gosmile-stock-state',JSON.stringify(state))}
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
 function stockClass(n){return n<=0?'zero':n<2?'low':''}
