@@ -51,7 +51,7 @@ function doPost(e) {
 
 function readComponents() {
   const rows = SpreadsheetApp.openById(SHEET_ID).getSheets()[0].getDataRange().getValues();
-  return rows.slice(1).filter(r => r[2]).map(r => ({
+  return rows.slice(1).filter(r => /^\d{3}\.\d{3}$/.test(String(r[2] || '').trim())).map(r => ({
     date: r[0] ? Utilities.formatDate(new Date(r[0]), Session.getScriptTimeZone(), 'yyyy-MM-dd') : '',
     category: r[1] || 'Pilares', ref: String(r[2]), measure: String(r[3] || ''), initial: Number(r[4] || 0), current: Number(r[5] || 0)
   }));
