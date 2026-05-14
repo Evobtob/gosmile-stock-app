@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#58a6ff"/><stop offset="1" stop-color="#0057d9"/></linearGradient></defs><rect width="1024" height="1024" rx="230" fill="url(#g)"/><path d="M255 354c0-72 58-130 130-130h254c72 0 130 58 130 130v316c0 72-58 130-130 130H385c-72 0-130-58-130-130V354Z" fill="white" opacity=".94"/><path d="M354 377h316M354 512h316M354 647h210" stroke="#007aff" stroke-width="58" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#55205C"/>
+      <stop offset="1" stop-color="#2B1037"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="50%" cy="30%" r="58%">
+      <stop stop-color="#9B4A9A" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#9B4A9A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+  <circle cx="512" cy="392" r="360" fill="url(#orb)"/>
+  <path d="M596 212c-171 0-310 139-310 310s139 310 310 310c88 0 168-37 224-96L704 631a154 154 0 1 1 0-218l116-105a308 308 0 0 0-224-96Z" fill="white"/>
+  <circle cx="596" cy="522" r="88" fill="#7A2A73"/>
+  <path d="M184 768h300M652 768h188M184 768v-76M840 768v-76" stroke="white" stroke-width="28" stroke-linecap="round" opacity=".9"/>
+</svg>

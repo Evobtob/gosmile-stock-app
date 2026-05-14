@@ -6,17 +6,23 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Stock Neodent" />
+  <meta name="theme-color" content="#55205c" />
   <title>Stock Neodent</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css?v=batch1" />
+  <link rel="stylesheet" href="styles.css?v=neodent-brand" />
 </head>
 <body>
   <main class="app-shell">
     <section class="hero glass">
-      <div>
-        <p class="eyebrow">GoSmile · Desagno</p>
-        <h1>Stock Neodent</h1>
-
+      <div class="brand-block">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M36.5 7.5c-13.8 0-25 11.2-25 25s11.2 25 25 25c7.2 0 13.7-3 18.2-7.9l-9.3-8.4a12.2 12.2 0 1 1 0-17.4l9.3-8.4A24.8 24.8 0 0 0 36.5 7.5Z" fill="white"/>
+          <circle cx="36.5" cy="32.5" r="7.5" fill="#7A2A73"/>
+        </svg>
+        <div class="brand-copy">
+          <p class="eyebrow">GoSmile · Desagno</p>
+          <h1>Stock Neodent</h1>
+        </div>
       </div>
       <div class="status-pill" id="backendStatus">Modo local</div>
     </section>
@@ -117,6 +123,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=batch1"></script>
+  <script src="app.js?v=neodent-brand"></script>
 </body>
 </html>
